@@ -1,11 +1,19 @@
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileInspector {
 
     public static void main(String[] args) {
-        // Set the default directory to src folder of the project
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+
+        }
+
+
         JFileChooser fileChooser = new JFileChooser("src");
 
         int result = fileChooser.showOpenDialog(null);
@@ -17,7 +25,7 @@ public class FileInspector {
             int wordCount = 0;
             int charCount = 0;
 
-            System.out.println("Contents of the file:\n");
+            System.out.println("\n--- File Content ---");
 
             try (Scanner scanner = new Scanner(selectedFile)) {
                 while (scanner.hasNextLine()) {
@@ -25,17 +33,15 @@ public class FileInspector {
                     System.out.println(line);
                     lineCount++;
 
-                    // Count words using regex to split on whitespace
-                    String[] words = line.trim().split("\\s+");
+
                     if (!line.trim().isEmpty()) {
+                        String[] words = line.trim().split("\\s+");
                         wordCount += words.length;
                     }
-
-                    // Count characters in line (including spaces)
                     charCount += line.length();
                 }
 
-                // Summary Report
+
                 System.out.println("\n--- Summary Report ---");
                 System.out.println("File Name: " + selectedFile.getName());
                 System.out.println("Number of Lines: " + lineCount);
@@ -43,11 +49,11 @@ public class FileInspector {
                 System.out.println("Number of Characters: " + charCount);
 
             } catch (FileNotFoundException e) {
-                System.out.println("File not found: " + e.getMessage());
+                System.out.println("Error: File not found.");
             }
 
         } else {
-            System.out.println("File selection canceled.");
+            System.out.println("No file selected.");
         }
     }
 }
